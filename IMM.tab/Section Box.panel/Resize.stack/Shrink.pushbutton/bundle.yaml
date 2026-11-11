@@ -1,0 +1,3 @@
+tooltip: |-
+  Shrink the section box of the active 3D view on all sides.
+  How to use: click once per step. The step size is set in Section Box > Settings; it will not shrink below a minimum size.

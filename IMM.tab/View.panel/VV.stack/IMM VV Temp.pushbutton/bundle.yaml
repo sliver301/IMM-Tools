@@ -1,0 +1,4 @@
+title: Temp. VV
+tooltip: |-
+  Turn Revit's temporary view mode on or off for the active view.
+  How to use: click to start, then use the other IMM VV tools (Apply VV, Categories, Annotations). Click again to exit; every change made meanwhile is removed. Without Temp. VV the changes are permanent.

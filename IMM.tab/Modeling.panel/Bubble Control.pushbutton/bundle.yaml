@@ -1,0 +1,3 @@
+tooltip: |-
+  Control grid and level bubbles (ends) across many views at once.
+  How to use: choose the views (current, selected, on sheets or manual pick), click the sides of the plan/section diagrams to choose which bubbles show, use Align to line up the ends (2D view-specific or 3D model extents), then Apply.

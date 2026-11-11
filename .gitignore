@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+Thumbs.db
+desktop.ini
+.DS_Store
+# per-user settings and logs written by the tools at runtime
+data/*.json
+data/*.log

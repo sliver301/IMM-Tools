@@ -1,0 +1,4 @@
+title: Set 3D Template
+tooltip: |-
+  Save the active 3D view's Visibility/Graphics as your 3D set.
+  How to use: set up a 3D view the way you like, then click. Overwrites the previous 3D set. Must be run from a 3D view.

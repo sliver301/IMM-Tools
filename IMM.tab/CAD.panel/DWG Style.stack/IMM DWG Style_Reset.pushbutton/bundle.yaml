@@ -1,0 +1,4 @@
+title: DWG Style Reset
+tooltip: |-
+  Clear the line color/weight overrides of a DWG in the active view.
+  How to use: select the DWG and click. With nothing selected, all DWGs visible in the active view are reset.

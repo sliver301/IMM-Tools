@@ -1,0 +1,159 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Bubble Control" Height="700" Width="1000" WindowStartupLocation="CenterScreen">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- View Selector -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+            <TextBlock Text="View Selection:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="Bold"/>
+            <ComboBox x:Name="cmbViewSelector" Width="200" SelectionChanged="OnViewSelectorChanged">
+                <ComboBoxItem Content="Current View" IsSelected="True"/>
+                <ComboBoxItem Content="Selected Views"/>
+                <ComboBoxItem Content="Views on Sheets"/>
+                <ComboBoxItem Content="Manual Select"/>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Plans Section -->
+            <GroupBox Grid.Column="0" Header="Plans" x:Name="grpPlans">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Button Content="Align All" Width="100" HorizontalAlignment="Right" Margin="0,0,0,5" Click="OnPlanAlignAll"/>
+                    
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Align Buttons -->
+                        <ToggleButton x:Name="chkPlanAlignTop" Grid.Row="0" Grid.Column="0" Margin="2" ToolTip="Align Top">
+                            <Image x:Name="imgPlanAlignTop" Stretch="Uniform" Margin="2"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkPlanAlignLeft" Grid.Row="2" Grid.Column="0" Margin="2" ToolTip="Align Left">
+                            <Image x:Name="imgPlanAlignLeft" Stretch="Uniform" Margin="2"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkPlanAlignRight" Grid.Row="0" Grid.Column="2" Margin="2" ToolTip="Align Right">
+                            <Image x:Name="imgPlanAlignRight" Stretch="Uniform" Margin="2"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkPlanAlignBottom" Grid.Row="2" Grid.Column="2" Margin="2" ToolTip="Align Bottom">
+                            <Image x:Name="imgPlanAlignBottom" Stretch="Uniform" Margin="2"/>
+                        </ToggleButton>
+
+                        <!-- Bubble Toggles -->
+                        <ToggleButton x:Name="chkPlanTop" Grid.Row="0" Grid.Column="1" Margin="2" Click="OnPlanCheckChanged">
+                            <CheckBox IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" IsHitTestVisible="False"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkPlanBottom" Grid.Row="2" Grid.Column="1" Margin="2" Click="OnPlanCheckChanged">
+                            <CheckBox IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" IsHitTestVisible="False"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkPlanLeft" Grid.Row="1" Grid.Column="0" Margin="2" Click="OnPlanCheckChanged">
+                            <CheckBox IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" IsHitTestVisible="False"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkPlanRight" Grid.Row="1" Grid.Column="2" Margin="2" Click="OnPlanCheckChanged">
+                            <CheckBox IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" IsHitTestVisible="False"/>
+                        </ToggleButton>
+
+                        <!-- Image without Border -->
+                        <Image x:Name="imgPlan" Grid.Row="1" Grid.Column="1" Stretch="Uniform" Margin="5"/>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+
+            <!-- Sections Section -->
+            <GroupBox Grid.Column="2" Header="Sections / Elevations" x:Name="grpSections">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Button Content="Align All" Width="100" HorizontalAlignment="Right" Margin="0,0,0,5" Click="OnSecAlignAll"/>
+
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Align Buttons -->
+                        <ToggleButton x:Name="chkSecAlignTop" Grid.Row="0" Grid.Column="0" Margin="2" ToolTip="Align Top">
+                            <Image x:Name="imgSecAlignTop" Stretch="Uniform" Margin="2"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkSecAlignLeft" Grid.Row="2" Grid.Column="0" Margin="2" ToolTip="Align Left">
+                            <Image x:Name="imgSecAlignLeft" Stretch="Uniform" Margin="2"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkSecAlignRight" Grid.Row="0" Grid.Column="2" Margin="2" ToolTip="Align Right">
+                            <Image x:Name="imgSecAlignRight" Stretch="Uniform" Margin="2"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkSecAlignBottom" Grid.Row="2" Grid.Column="2" Margin="2" ToolTip="Align Bottom">
+                            <Image x:Name="imgSecAlignBottom" Stretch="Uniform" Margin="2"/>
+                        </ToggleButton>
+
+                        <!-- Bubble Toggles -->
+                        <ToggleButton x:Name="chkSecTop" Grid.Row="0" Grid.Column="1" Margin="2" Click="OnSecCheckChanged">
+                            <CheckBox IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" IsHitTestVisible="False"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkSecBottom" Grid.Row="2" Grid.Column="1" Margin="2" Click="OnSecCheckChanged">
+                            <CheckBox IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" IsHitTestVisible="False"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkSecLeft" Grid.Row="1" Grid.Column="0" Margin="2" Click="OnSecCheckChanged">
+                            <CheckBox IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" IsHitTestVisible="False"/>
+                        </ToggleButton>
+                        <ToggleButton x:Name="chkSecRight" Grid.Row="1" Grid.Column="2" Margin="2" Click="OnSecCheckChanged">
+                            <CheckBox IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" IsHitTestVisible="False"/>
+                        </ToggleButton>
+
+                        <!-- Image without Border -->
+                        <Image x:Name="imgSec" Grid.Row="1" Grid.Column="1" Stretch="Uniform" Margin="5"/>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+        </Grid>
+
+        <!-- Align Modes -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,15,0,0">
+            <TextBlock Text="Align Mode:" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,15,0"/>
+            <CheckBox x:Name="chkAlign2D" Content="2D (View Specific)" IsChecked="True" Margin="0,0,15,0" VerticalAlignment="Center"/>
+            <CheckBox x:Name="chkAlign3D" Content="3D (Model Extents)" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button Content="Cancel" Width="100" Height="30" Margin="0,0,10,0" Click="OnCancelClick"/>
+            <Button Content="Apply" Width="100" Height="30" Click="OnApplyClick" IsDefault="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

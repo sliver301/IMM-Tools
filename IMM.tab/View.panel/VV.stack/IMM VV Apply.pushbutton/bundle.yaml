@@ -1,0 +1,5 @@
+title: Apply VV
+tooltip: |-
+  Apply your saved Visibility/Graphics to the active view.
+  How to use: click in any plan, section, elevation or 3D view. 3D views get the saved 3D set, all other views get the saved 2D set. Save the sets first with IMM VV Settings.
+  Categories, overrides, filters, detail level and display style are applied. Start Temp. VV first if you want the change to be temporary.

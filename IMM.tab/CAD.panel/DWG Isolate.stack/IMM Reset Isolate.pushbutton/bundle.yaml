@@ -1,0 +1,4 @@
+title: Reset Isolate
+tooltip: |-
+  Bring back the DWG layers hidden by Isolate DWG Layer in the active view.
+  How to use: click to reset every DWG isolated by the plugin in this view, or select one DWG first to reset only that one. Only DWG layers are restored; elements you hid temporarily (HH, HI, HC) stay hidden.

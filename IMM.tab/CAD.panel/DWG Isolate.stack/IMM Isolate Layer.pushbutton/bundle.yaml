@@ -1,0 +1,4 @@
+title: Isolate DWG Layer
+tooltip: |-
+  Isolate one or more layers of a DWG in the active view.
+  How to use: select a DWG import/link first (or click and you will be told how), then click a line or block of the layer to keep. Hold Ctrl while clicking to keep several layers; finish with a click without Ctrl, Enter, or a double-click on empty space. Esc cancels. All other layers of that DWG are hidden in this view only, and the view shows the temporary-mode frame. Use Reset Isolate to bring the layers back.

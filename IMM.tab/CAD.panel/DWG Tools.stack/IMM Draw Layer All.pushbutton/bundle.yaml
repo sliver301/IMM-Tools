@@ -1,0 +1,3 @@
+tooltip: |-
+  Toggle the Draw Layer of every DWG import and link in the whole file at once.
+  How to use: just click - no selection needed. All DWGs become Background; if they are all already Background they switch to Foreground.

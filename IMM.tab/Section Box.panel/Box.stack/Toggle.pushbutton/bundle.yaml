@@ -1,0 +1,3 @@
+tooltip: |-
+  Turn the section box of the active 3D view on or off.
+  How to use: click to switch it. The box size is remembered when you turn it off and restored when you turn it back on. From a non-3D view the default 3D view opens first.

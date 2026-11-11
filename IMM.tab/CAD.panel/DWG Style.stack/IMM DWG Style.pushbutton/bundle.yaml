@@ -1,0 +1,4 @@
+title: DWG Style
+tooltip: |-
+  Set one line color and line weight for everything in a DWG, in the active view only.
+  How to use: select a DWG import/link first (or click and you will be told how to pick one), then choose the line weight and color and press Apply. It covers every layer, so all lines, blocks and nested blocks change. The DWG file is untouched; use DWG Style Reset to clear it.

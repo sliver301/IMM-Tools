@@ -1,0 +1,3 @@
+tooltip: |-
+  Show or hide individual layers of imported/linked DWG files.
+  How to use: pick the views to apply to (current, selected or all), tick the DWG files, then check the layers to keep visible - unchecked layers are hidden. Use the search box to find layers and Reset to show all layers again, then press Apply.

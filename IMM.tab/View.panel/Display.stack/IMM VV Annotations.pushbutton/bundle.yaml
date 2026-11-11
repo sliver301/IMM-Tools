@@ -1,0 +1,4 @@
+title: Annotations
+tooltip: |-
+  Show or hide all annotation categories (dimensions, tags, text, etc.) in the active view.
+  How to use: click to switch. Permanent unless Temp. VV is active, in which case it is undone when you exit Temp. VV.

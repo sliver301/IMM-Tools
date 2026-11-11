@@ -1,0 +1,3 @@
+tooltip: |-
+  Create a section box around selected elements.
+  How to use: select elements (or pick them when prompted) and click. The box is placed with the offset set in Settings. Parallel mode turns the box to follow the element; native mode keeps it aligned to project axes.

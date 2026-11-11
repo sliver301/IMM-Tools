@@ -1,0 +1,3 @@
+tooltip: |-
+  Toggle the Draw Layer of DWGs between Background and Foreground.
+  How to use: select one or more DWG imports/links and click. With nothing selected, all DWGs visible in the active view are used. If all are already Background they switch to Foreground, otherwise all become Background.

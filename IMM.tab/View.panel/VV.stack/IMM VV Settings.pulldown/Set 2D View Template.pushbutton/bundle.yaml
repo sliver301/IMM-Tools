@@ -1,0 +1,4 @@
+title: Set 2D Template
+tooltip: |-
+  Save the active plan, section or elevation view's Visibility/Graphics as your 2D set.
+  How to use: set up a 2D view the way you like, then click. Overwrites the previous 2D set. Must be run from a non-3D view.

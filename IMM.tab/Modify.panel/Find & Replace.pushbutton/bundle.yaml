@@ -1,0 +1,3 @@
+tooltip: |-
+  Find and replace text in element parameters, with prefix/suffix support.
+  How to use: pick a category and parameter, enter Find and Replace text (optional Match Case, Prefix, Suffix), review the Original vs New values in the preview table, tick the elements to change, then press Apply.

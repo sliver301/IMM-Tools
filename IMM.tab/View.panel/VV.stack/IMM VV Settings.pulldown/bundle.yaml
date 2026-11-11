@@ -1,0 +1,4 @@
+title: VV Settings
+tooltip: |-
+  Save the Visibility/Graphics of the current view as your 2D or 3D set.
+  The sets are stored in a file inside the plugin folder and are shared by all your Revit projects until you overwrite them.

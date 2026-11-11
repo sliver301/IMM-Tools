@@ -1,0 +1,4 @@
+title: DWG Style
+tooltip: |-
+  Change the line color and line weight of a whole DWG in the active view.
+  How to use: select a DWG, click DWG Style, pick the weight and color. Reset clears it.

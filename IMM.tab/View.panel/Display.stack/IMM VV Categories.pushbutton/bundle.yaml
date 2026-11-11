@@ -1,0 +1,4 @@
+title: Categories
+tooltip: |-
+  Dropdown list of model categories with check boxes for the active view.
+  How to use: click to open the list under the cursor, then tick or untick categories. Each click is applied immediately; unticked categories disappear from the view. Use the search box and All / None / Invert to speed up. Click anywhere outside to close. Permanent unless Temp. VV is active.

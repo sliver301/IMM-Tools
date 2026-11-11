@@ -1,0 +1,3 @@
+tooltip: |-
+  Settings for the section box tools.
+  How to use: set the creation offset (mm), the Grow/Shrink step (mm) and the orientation mode (parallel to the element or native project axes), then save.
