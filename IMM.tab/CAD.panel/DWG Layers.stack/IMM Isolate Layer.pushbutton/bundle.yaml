@@ -1,0 +1,4 @@
+title: Isolate Layer
+tooltip: |-
+  Hide every DWG layer except the ones you click.
+  Select a DWG, then click a line on the layer to keep. Ctrl+click for more layers.

@@ -1,0 +1,4 @@
+title: Draw Layer
+tooltip: |-
+  Switch DWGs between Background and Foreground.
+  Select DWGs and click. Nothing selected = all DWGs in the view. Shift+click = every DWG in the file.

@@ -1,0 +1,4 @@
+title: Layer Visibility
+tooltip: |-
+  Show or hide DWG layers in one or many views.
+  Pick views and DWGs, tick the layers to keep, Apply.

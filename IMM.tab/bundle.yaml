@@ -1,0 +1,7 @@
+# Panel order on the IMM tab (left to right)
+layout:
+  - Modeling
+  - View
+  - Section Box
+  - CAD
+  - Worksets

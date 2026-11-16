@@ -374,12 +374,14 @@ class Preview(object):
     layers of the DWG and draws the picked ones red. Everything runs in a
     transaction group that is rolled back at the end, so nothing is kept."""
 
-    def __init__(self, uidoc):
+    def __init__(self, uidoc, styles=None):
+        # styles: optional (picked OverrideGraphicSettings, other-layers one)
         self._uidoc = uidoc
         self._doc = uidoc.Document
         self._view = uidoc.ActiveView
         self._group = None
         self._failed = False
+        self._styles = styles
 
     def update(self, found):
         if self._failed:
@@ -389,11 +391,14 @@ class Preview(object):
             if self._group is None:
                 self._group = TransactionGroup(doc, TITLE + ' preview')
                 self._group.Start()
-            grey = OverrideGraphicSettings()
-            grey.SetHalftone(True)
-            grey.SetProjectionLineColor(Color(160, 160, 160))
-            red = OverrideGraphicSettings()
-            red.SetProjectionLineColor(Color(255, 0, 0))
+            if self._styles is not None:
+                red, grey = self._styles
+            else:
+                grey = OverrideGraphicSettings()
+                grey.SetHalftone(True)
+                grey.SetProjectionLineColor(Color(160, 160, 160))
+                red = OverrideGraphicSettings()
+                red.SetProjectionLineColor(Color(255, 0, 0))
             t = Transaction(doc, TITLE + ' preview')
             t.Start()
             for imp, picked, _blocks in found.values():
@@ -425,7 +430,7 @@ class Preview(object):
             self._group = None
 
 
-def pick_layers(uidoc, imports):
+def pick_layers(uidoc, imports, styles=None, prompt=None):
     """Pick a line/block inside the given DWGs. One click finishes; clicks made
     while holding Ctrl keep picking until a click without Ctrl, Enter or a
     double-click on empty space. Esc cancels everything.
@@ -439,9 +444,9 @@ def pick_layers(uidoc, imports):
     log = []
     session = PickSession()
     session.start()
-    preview = Preview(uidoc)
+    preview = Preview(uidoc, styles)
     try:
-        ok = _pick_loop(uidoc, doc, view, ids, found, order, log, session, preview)
+        ok = _pick_loop(uidoc, doc, view, ids, found, order, log, session, preview, prompt)
     finally:
         session.stop()
         preview.end()
@@ -451,16 +456,17 @@ def pick_layers(uidoc, imports):
     return [found[k] for k in order]
 
 
-def _pick_loop(uidoc, doc, view, ids, found, order, log, session, preview):
+def _pick_loop(uidoc, doc, view, ids, found, order, log, session, preview, prompt=None):
     """Returns True to apply what was picked, False when cancelled."""
     while True:
         try:
             ref = uidoc.Selection.PickObject(
                 ObjectType.PointOnElement, _ImportFilter(ids),
-                'Click a layer to keep (Ctrl + click for more, Enter or double-click '
-                'empty space to finish, Esc to cancel)')
+                prompt or 'Click a layer to keep (Ctrl + click for more; Enter, Esc or double-click '
+                'empty space to finish)')
         except OperationCanceledException:
-            return session.approved
+            # Esc finishes when something was already picked (nothing = cancel)
+            return session.approved or bool(found)
         more = _ctrl_down()
         session.picks += 1
         imp = doc.GetElement(ref.ElementId)

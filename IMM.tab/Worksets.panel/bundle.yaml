@@ -1,0 +1,6 @@
+# Large Live Watcher, then the Workset Tools stack. Settings sits in the panel's slide-out.
+layout:
+  - Live Watcher
+  - Workset Tools
+  - ">>>>>"
+  - Settings

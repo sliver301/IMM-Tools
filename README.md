@@ -1,6 +1,11 @@
-<p align="center"><img src="assets/banner.png" alt="IMM Tools" width="100%"></p>
 <p align="center">
-<img alt="pyRevit" src="https://img.shields.io/badge/pyRevit-extension-F5A524?style=flat-square">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.png">
+  <img src="assets/banner.png" alt="imm-tools: less clicking, more designing" width="100%">
+</picture>
+</p>
+<p align="center">
+<img alt="pyRevit" src="https://img.shields.io/badge/pyRevit-extension-E8590C?style=flat-square">
 <img alt="Revit" src="https://img.shields.io/badge/Autodesk-Revit-1E2A44?style=flat-square">
 <img alt="Python" src="https://img.shields.io/badge/IronPython-2.7-3776AB?style=flat-square&logo=python&logoColor=white">
 <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-22C55E?style=flat-square"></a>
@@ -8,12 +13,12 @@
 <img alt="Built with AI" src="https://img.shields.io/badge/built%20with-Claude%20AI-D97757?style=flat-square">
 </p>
 
-**IMM Tools** adds an **IMM** tab to the Revit ribbon with small, focused tools for the jobs that
-eat time every day: taming imported DWGs, cleaning up grid bubbles, driving the section box, and
-switching view visibility without opening Visibility/Graphics again and again.
+**IMM Tools** adds an **IMM** tab to the Revit ribbon with focused tools for the jobs that
+eat time every day: taming imported DWGs, cleaning up grid bubbles, driving the section box, switching view
+visibility without opening Visibility/Graphics again and again, and keeping worksets tidy.
 
-Every button has a hover tooltip that explains what it does and how to use it, so you can learn
-the tools from inside Revit.
+Every button has a short hover tooltip and a small animated clip that shows how to use it, so you
+can learn the tools from inside Revit.
 
 > [!NOTE]
 > IMM Tools is a work in progress. Tools are added and refined as they are tested on real projects.
@@ -29,47 +34,16 @@ the tools from inside Revit.
 
 ## Tools
 
-### CAD
-
-Control imported and linked DWG files without leaving the view.
-
-| | Tool | What it does |
-|:-:|---|---|
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Tools.stack/DWG%20Layer%20Visibility.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Tools.stack/DWG%20Layer%20Visibility.pushbutton/icon.png" width="40" alt=""></picture> | **DWG Layer Visibility** | Show or hide individual DWG layers in the current, selected or all views, with search and reset. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Isolate.stack/IMM%20Isolate%20Layer.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Isolate.stack/IMM%20Isolate%20Layer.pushbutton/icon.png" width="40" alt=""></picture> | **Isolate DWG Layer** | Click a line to keep its layer and hide every other layer of that DWG in the active view. Ctrl+click keeps several. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Isolate.stack/IMM%20Reset%20Isolate.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Isolate.stack/IMM%20Reset%20Isolate.pushbutton/icon.png" width="40" alt=""></picture> | **Reset Isolate** | Bring back the layers hidden by Isolate, for one DWG or all of them. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Style.stack/IMM%20DWG%20Style.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Style.stack/IMM%20DWG%20Style.pushbutton/icon.png" width="40" alt=""></picture> | **DWG Style** | Give a whole DWG one line color and line weight in the active view. The DWG file is untouched. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Style.stack/IMM%20DWG%20Style_Reset.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Style.stack/IMM%20DWG%20Style_Reset.pushbutton/icon.png" width="40" alt=""></picture> | **DWG Style Reset** | Clear those color and weight overrides. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Tools.stack/IMM%20Draw%20Layer%20Selected.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Tools.stack/IMM%20Draw%20Layer%20Selected.pushbutton/icon.png" width="40" alt=""></picture> | **Draw Layer (Selected)** | Switch selected DWGs between Background and Foreground. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Tools.stack/IMM%20Draw%20Layer%20All.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Tools.stack/IMM%20Draw%20Layer%20All.pushbutton/icon.png" width="40" alt=""></picture> | **Draw Layer (All)** | Switch every DWG in the file between Background and Foreground in one click. |
+Panels appear on the **IMM** tab in this order. Hover any button for a short tip and an animated preview.
 
 ### Modeling
 
-Grid and level housekeeping across many views.
+Grid, level and parameter housekeeping across many views.
 
 | | Tool | What it does |
 |:-:|---|---|
 | <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Modeling.panel/Bubble%20Control.pushbutton/icon.dark.png"><img src="IMM.tab/Modeling.panel/Bubble%20Control.pushbutton/icon.png" width="40" alt=""></picture> | **Bubble Control** | Pick which grid and level bubbles show in many views at once from a visual plan/section diagram, and align their ends. |
-
-### Modify
-
-Bulk edits to element data.
-
-| | Tool | What it does |
-|:-:|---|---|
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Modify.panel/Find%20%26%20Replace.pushbutton/icon.dark.png"><img src="IMM.tab/Modify.panel/Find%20%26%20Replace.pushbutton/icon.png" width="40" alt=""></picture> | **Find & Replace** | Find and replace text in any parameter, with prefix/suffix, match case and a before/after preview. |
-
-### Section Box
-
-A faster section box for 3D views.
-
-| | Tool | What it does |
-|:-:|---|---|
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Section%20Box.panel/Box.stack/Toggle.pushbutton/icon.dark.png"><img src="IMM.tab/Section%20Box.panel/Box.stack/Toggle.pushbutton/icon.png" width="40" alt=""></picture> | **Toggle** | Turn the section box on or off and remember its size. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Section%20Box.panel/Box.stack/Create.pushbutton/icon.dark.png"><img src="IMM.tab/Section%20Box.panel/Box.stack/Create.pushbutton/icon.png" width="40" alt=""></picture> | **Create** | Box the selected elements with an offset, aligned to the element or to the project axes. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Section%20Box.panel/Box.stack/Settings.pushbutton/icon.dark.png"><img src="IMM.tab/Section%20Box.panel/Box.stack/Settings.pushbutton/icon.png" width="40" alt=""></picture> | **Settings** | Set the offset, the grow/shrink step and the orientation mode. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Section%20Box.panel/Resize.stack/Grow.pushbutton/icon.dark.png"><img src="IMM.tab/Section%20Box.panel/Resize.stack/Grow.pushbutton/icon.png" width="40" alt=""></picture> | **Grow** | Enlarge the box on all sides by one step. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Section%20Box.panel/Resize.stack/Shrink.pushbutton/icon.dark.png"><img src="IMM.tab/Section%20Box.panel/Resize.stack/Shrink.pushbutton/icon.png" width="40" alt=""></picture> | **Shrink** | Shrink the box on all sides by one step. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Modeling.panel/Find%20%26%20Replace.pushbutton/icon.dark.png"><img src="IMM.tab/Modeling.panel/Find%20%26%20Replace.pushbutton/icon.png" width="40" alt=""></picture> | **Find & Replace** | Find and replace text in any parameter, with prefix/suffix, match case and a before/after preview. |
 
 ### View
 
@@ -78,10 +52,47 @@ Saved Visibility/Graphics presets and quick visibility switches.
 | | Tool | What it does |
 |:-:|---|---|
 | <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/View.panel/VV.stack/IMM%20VV%20Apply.pushbutton/icon.dark.png"><img src="IMM.tab/View.panel/VV.stack/IMM%20VV%20Apply.pushbutton/icon.png" width="40" alt=""></picture> | **Apply VV** | Apply your saved 2D or 3D Visibility/Graphics set to the active view. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/View.panel/VV.stack/IMM%20VV%20Temp.pushbutton/icon.dark.png"><img src="IMM.tab/View.panel/VV.stack/IMM%20VV%20Temp.pushbutton/icon.png" width="40" alt=""></picture> | **Temp. VV** | Work in Revit's temporary view mode so every VV change is undone when you exit. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/View.panel/VV.stack/IMM%20VV%20Temp.pushbutton/icon.dark.png"><img src="IMM.tab/View.panel/VV.stack/IMM%20VV%20Temp.pushbutton/icon.png" width="40" alt=""></picture> | **Temp VV** | Work in Revit's temporary view mode so every VV change is undone when you exit. |
 | <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/View.panel/VV.stack/IMM%20VV%20Settings.pulldown/icon.dark.png"><img src="IMM.tab/View.panel/VV.stack/IMM%20VV%20Settings.pulldown/icon.png" width="40" alt=""></picture> | **VV Settings** | Save the active view as your 2D or 3D set, or copy it into the matching set. |
-| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/View.panel/Display.stack/IMM%20VV%20Categories.pushbutton/icon.dark.png"><img src="IMM.tab/View.panel/Display.stack/IMM%20VV%20Categories.pushbutton/icon.png" width="40" alt=""></picture> | **Categories** | A searchable drop-down of model categories with check boxes, applied as you click. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/View.panel/Display.stack/IMM%20VV%20Categories.pushbutton/icon.dark.png"><img src="IMM.tab/View.panel/Display.stack/IMM%20VV%20Categories.pushbutton/icon.png" width="40" alt=""></picture> | **Categories** | A quick list to show or hide categories, links and DWGs in the view, applied as you click. |
 | <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/View.panel/Display.stack/IMM%20VV%20Annotations.pushbutton/icon.dark.png"><img src="IMM.tab/View.panel/Display.stack/IMM%20VV%20Annotations.pushbutton/icon.png" width="40" alt=""></picture> | **Annotations** | Show or hide every annotation category in one click. |
+
+### Section Box
+
+A faster section box for 3D views.
+
+| | Tool | What it does |
+|:-:|---|---|
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Section%20Box.panel/Toggle.pushbutton/icon.dark.png"><img src="IMM.tab/Section%20Box.panel/Toggle.pushbutton/icon.png" width="40" alt=""></picture> | **Toggle** | Turn the section box on or off and remember its size. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Section%20Box.panel/Box.stack/Create.pushbutton/icon.dark.png"><img src="IMM.tab/Section%20Box.panel/Box.stack/Create.pushbutton/icon.png" width="40" alt=""></picture> | **Create** | Box the selected elements with an offset, aligned to the element or to the project axes. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Section%20Box.panel/Box.stack/Grow.pushbutton/icon.dark.png"><img src="IMM.tab/Section%20Box.panel/Box.stack/Grow.pushbutton/icon.png" width="40" alt=""></picture> | **Grow** | Enlarge the box on all sides by one step. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Section%20Box.panel/Box.stack/Shrink.pushbutton/icon.dark.png"><img src="IMM.tab/Section%20Box.panel/Box.stack/Shrink.pushbutton/icon.png" width="40" alt=""></picture> | **Shrink** | Shrink the box on all sides by one step. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Section%20Box.panel/Settings.pushbutton/icon.dark.png"><img src="IMM.tab/Section%20Box.panel/Settings.pushbutton/icon.png" width="40" alt=""></picture> | **Settings** | Set the offset, the grow/shrink step and the orientation mode. Found in the panel's slide-out. |
+
+### CAD
+
+Control imported and linked DWG files without leaving the view.
+
+| | Tool | What it does |
+|:-:|---|---|
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Layer%20Visibility.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Layer%20Visibility.pushbutton/icon.png" width="40" alt=""></picture> | **Layer Visibility** | Show or hide DWG layers in one or many views, with search and reset. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Layers.stack/IMM%20Isolate%20Layer.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Layers.stack/IMM%20Isolate%20Layer.pushbutton/icon.png" width="40" alt=""></picture> | **Isolate Layer** | Click a line to keep its layer and hide every other layer of that DWG. Ctrl+click keeps several. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Layers.stack/IMM%20Color%20Layer.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Layers.stack/IMM%20Color%20Layer.pushbutton/icon.png" width="40" alt=""></picture> | **Color Layer** | Show the layers you click in red and the rest in grey. Shift+click for settings. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Layers.stack/IMM%20Reset%20Isolate.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Layers.stack/IMM%20Reset%20Isolate.pushbutton/icon.png" width="40" alt=""></picture> | **Reset Layers** | Undo Isolate Layer and Color Layer, for one DWG or all of them. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Style.stack/IMM%20DWG%20Style.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Style.stack/IMM%20DWG%20Style.pushbutton/icon.png" width="40" alt=""></picture> | **DWG Style** | Give a whole DWG one line color and line weight in the active view. The DWG file is untouched. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Style.stack/IMM%20DWG%20Style_Reset.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Style.stack/IMM%20DWG%20Style_Reset.pushbutton/icon.png" width="40" alt=""></picture> | **Style Reset** | Clear those color and weight overrides. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/CAD.panel/DWG%20Style.stack/IMM%20Draw%20Layer.pushbutton/icon.dark.png"><img src="IMM.tab/CAD.panel/DWG%20Style.stack/IMM%20Draw%20Layer.pushbutton/icon.png" width="40" alt=""></picture> | **Draw Layer** | Switch DWGs between Background and Foreground: the selection, the view, or (Shift+click) the whole file. |
+
+### Worksets
+
+Keep elements on the right workset while you model. Work in progress.
+
+| | Tool | What it does |
+|:-:|---|---|
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Worksets.panel/Live%20Watcher.pushbutton/icon.dark.png"><img src="IMM.tab/Worksets.panel/Live%20Watcher.pushbutton/icon.png" width="40" alt=""></picture> | **Live Watcher** | Moves new elements to their mapped workset automatically. Green = on, red = off. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Worksets.panel/Workset%20Tools.stack/Manager.pushbutton/icon.dark.png"><img src="IMM.tab/Worksets.panel/Workset%20Tools.stack/Manager.pushbutton/icon.png" width="40" alt=""></picture> | **Manager** | Create worksets and map categories (or single types) to them in one window. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Worksets.panel/Workset%20Tools.stack/Quick%20Status.pushbutton/icon.dark.png"><img src="IMM.tab/Worksets.panel/Workset%20Tools.stack/Quick%20Status.pushbutton/icon.png" width="40" alt=""></picture> | **Quick Status** | A quick look at your worksets and the watcher status. |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="IMM.tab/Worksets.panel/Settings.pushbutton/icon.dark.png"><img src="IMM.tab/Worksets.panel/Settings.pushbutton/icon.png" width="40" alt=""></picture> | **Settings** | Your personal Workset Manager settings. Found in the panel's slide-out. |
 
 ## Install
 

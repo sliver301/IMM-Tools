@@ -1,0 +1,747 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="IMM Workset Manager"
+        Width="1100" Height="720" MinWidth="940" MinHeight="580"
+        WindowStartupLocation="CenterScreen" ShowInTaskbar="False"
+        FontFamily="Segoe UI" FontSize="12.5"
+        Background="{DynamicResource Bg}" Foreground="{DynamicResource Fg}">
+  <Window.Resources>
+    <SolidColorBrush x:Key="Bg" Color="#F6F7F9"/>
+    <SolidColorBrush x:Key="Side" Color="#EEF0F3"/>
+    <SolidColorBrush x:Key="Card" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Line" Color="#E3E6EA"/>
+    <SolidColorBrush x:Key="Fg" Color="#1F2328"/>
+    <SolidColorBrush x:Key="Fg2" Color="#59636E"/>
+    <SolidColorBrush x:Key="Accent" Color="#2F6FEB"/>
+    <SolidColorBrush x:Key="AccentSoft" Color="#E8F0FE"/>
+    <SolidColorBrush x:Key="Hover" Color="#F0F2F5"/>
+    <SolidColorBrush x:Key="Select" Color="#DCE8FD"/>
+    <SolidColorBrush x:Key="WarnBg" Color="#FFF4E5"/>
+    <SolidColorBrush x:Key="WarnLine" Color="#F59E0B"/>
+    <SolidColorBrush x:Key="WarnFg" Color="#7A3E00"/>
+    <SolidColorBrush x:Key="WarnButton" Color="#E8590C"/>
+    <SolidColorBrush x:Key="Danger" Color="#C62828"/>
+
+    <!-- buttons -->
+    <Style x:Key="Btn" TargetType="Button">
+      <Setter Property="Foreground" Value="{DynamicResource Fg}"/>
+      <Setter Property="Background" Value="{DynamicResource Card}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Line}"/>
+      <Setter Property="Padding" Value="12,6"/>
+      <Setter Property="Margin" Value="0,0,8,8"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="b" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="1" CornerRadius="6" Padding="{TemplateBinding Padding}">
+              <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="Background" Value="{DynamicResource Hover}"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="b" Property="Opacity" Value="0.45"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="BtnPrimary" TargetType="Button" BasedOn="{StaticResource Btn}">
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="Background" Value="{DynamicResource Accent}"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="b" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="Opacity" Value="0.88"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="b" Property="Opacity" Value="0.45"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="BtnWarn" TargetType="Button" BasedOn="{StaticResource BtnPrimary}">
+      <Setter Property="Background" Value="{DynamicResource WarnButton}"/>
+    </Style>
+    <Style x:Key="BtnWide" TargetType="Button" BasedOn="{StaticResource Btn}">
+      <Setter Property="HorizontalAlignment" Value="Stretch"/>
+      <Setter Property="HorizontalContentAlignment" Value="Left"/>
+      <Setter Property="Margin" Value="0,0,0,6"/>
+    </Style>
+
+    <!-- sidebar navigation -->
+    <Style x:Key="Nav" TargetType="RadioButton">
+      <Setter Property="Foreground" Value="{DynamicResource Fg}"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Margin" Value="0,0,0,4"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="RadioButton">
+            <Border x:Name="b" CornerRadius="8" Padding="10,9" Background="Transparent">
+              <DockPanel>
+                <Border x:Name="mark" DockPanel.Dock="Left" Width="3" CornerRadius="2" Margin="0,1,10,1" Background="Transparent"/>
+                <ContentPresenter VerticalAlignment="Center"/>
+              </DockPanel>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="Background" Value="{DynamicResource Hover}"/>
+              </Trigger>
+              <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="b" Property="Background" Value="{DynamicResource Card}"/>
+                <Setter TargetName="mark" Property="Background" Value="{DynamicResource Accent}"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- text and cards -->
+    <Style x:Key="PageTitle" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="20"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    <Style x:Key="Hint" TargetType="TextBlock">
+      <Setter Property="Foreground" Value="{DynamicResource Fg2}"/>
+      <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+    <Style x:Key="Section" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="{DynamicResource Fg2}"/>
+      <Setter Property="Margin" Value="0,16,0,6"/>
+    </Style>
+    <Style x:Key="CardBox" TargetType="Border">
+      <Setter Property="Background" Value="{DynamicResource Card}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Line}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="10"/>
+    </Style>
+
+    <Style TargetType="TextBox">
+      <Setter Property="Padding" Value="8,0"/>
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Background" Value="{DynamicResource Card}"/>
+      <Setter Property="Foreground" Value="{DynamicResource Fg}"/>
+      <Setter Property="CaretBrush" Value="{DynamicResource Fg}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Line}"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="TextBox">
+            <Border x:Name="b" CornerRadius="6" Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+              <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="BorderBrush" Value="{DynamicResource Fg2}"/>
+              </Trigger>
+              <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="b" Property="BorderBrush" Value="{DynamicResource Accent}"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="BtnClear" TargetType="Button">
+      <Setter Property="Foreground" Value="{DynamicResource Fg2}"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Width" Value="24"/>
+      <Setter Property="Height" Value="24"/>
+      <Setter Property="Margin" Value="0,0,4,0"/>
+      <Setter Property="HorizontalAlignment" Value="Right"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="Focusable" Value="False"/>
+      <Setter Property="ToolTip" Value="Clear"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="b" CornerRadius="12" Background="Transparent">
+              <Path Data="M0,0 L8,8 M8,0 L0,8" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.6"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="Background" Value="{DynamicResource Hover}"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style TargetType="CheckBox">
+      <Setter Property="Foreground" Value="{DynamicResource Fg}"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="ComboToggle" TargetType="ToggleButton">
+      <Setter Property="Focusable" Value="False"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ToggleButton">
+            <Border x:Name="b" CornerRadius="6" Background="{DynamicResource Card}"
+                    BorderBrush="{DynamicResource Line}" BorderThickness="1">
+              <Path Data="M0,0 L4.5,4.5 L9,0" Stroke="{DynamicResource Fg2}" StrokeThickness="1.6"
+                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,11,0"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="BorderBrush" Value="{DynamicResource Fg2}"/>
+              </Trigger>
+              <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="b" Property="BorderBrush" Value="{DynamicResource Accent}"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style TargetType="ComboBox">
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Foreground" Value="{DynamicResource Fg}"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ComboBox">
+            <Grid>
+              <ToggleButton Style="{StaticResource ComboToggle}" ClickMode="Press"
+                            IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+              <ContentPresenter IsHitTestVisible="False" Margin="10,0,30,0" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Content="{TemplateBinding SelectionBoxItem}"
+                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"/>
+              <Popup x:Name="PART_Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom"
+                     AllowsTransparency="True" Focusable="False" PopupAnimation="Fade">
+                <Border Margin="0,4,0,0" Padding="4" CornerRadius="8" MaxHeight="340"
+                        MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                        Background="{DynamicResource Card}" BorderBrush="{DynamicResource Line}" BorderThickness="1">
+                  <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+                  </ScrollViewer>
+                </Border>
+              </Popup>
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.5"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style TargetType="ComboBoxItem">
+      <Setter Property="Foreground" Value="{DynamicResource Fg}"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ComboBoxItem">
+            <Border x:Name="b" CornerRadius="5" Padding="9,6" Background="Transparent">
+              <ContentPresenter/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="b" Property="Background" Value="{DynamicResource Select}"/>
+              </Trigger>
+              <Trigger Property="IsHighlighted" Value="True">
+                <Setter TargetName="b" Property="Background" Value="{DynamicResource Hover}"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- slim scroll bars that follow the theme -->
+    <Style x:Key="ScrollThumb" TargetType="Thumb">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Thumb">
+            <Border x:Name="t" CornerRadius="4" Background="{DynamicResource Line}"/>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="t" Property="Background" Value="{DynamicResource Fg2}"/>
+              </Trigger>
+              <Trigger Property="IsDragging" Value="True">
+                <Setter TargetName="t" Property="Background" Value="{DynamicResource Fg2}"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style TargetType="ScrollBar">
+      <Setter Property="Background" Value="{DynamicResource Card}"/>
+      <Setter Property="Width" Value="10"/>
+      <Setter Property="MinWidth" Value="10"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ScrollBar">
+            <Grid Background="{TemplateBinding Background}">
+              <Track x:Name="PART_Track" IsDirectionReversed="True" Margin="2">
+                <Track.Thumb>
+                  <Thumb Style="{StaticResource ScrollThumb}" MinHeight="24"/>
+                </Track.Thumb>
+              </Track>
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+      <Style.Triggers>
+        <Trigger Property="Orientation" Value="Horizontal">
+          <Setter Property="Width" Value="Auto"/>
+          <Setter Property="MinWidth" Value="0"/>
+          <Setter Property="Height" Value="10"/>
+          <Setter Property="MinHeight" Value="10"/>
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="ScrollBar">
+                <Grid Background="{TemplateBinding Background}">
+                  <Track x:Name="PART_Track" IsDirectionReversed="False" Margin="2">
+                    <Track.Thumb>
+                      <Thumb Style="{StaticResource ScrollThumb}" MinWidth="24"/>
+                    </Track.Thumb>
+                  </Track>
+                </Grid>
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+
+    <!-- lists -->
+    <Style TargetType="DataGrid">
+      <Setter Property="Background" Value="{DynamicResource Card}"/>
+      <Setter Property="Foreground" Value="{DynamicResource Fg}"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="RowBackground" Value="{DynamicResource Card}"/>
+      <Setter Property="AlternatingRowBackground" Value="{DynamicResource Card}"/>
+      <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+      <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource Line}"/>
+      <Setter Property="HeadersVisibility" Value="Column"/>
+      <Setter Property="RowHeight" Value="34"/>
+      <Setter Property="AutoGenerateColumns" Value="False"/>
+      <Setter Property="IsReadOnly" Value="True"/>
+      <Setter Property="CanUserAddRows" Value="False"/>
+      <Setter Property="CanUserResizeRows" Value="False"/>
+      <Setter Property="SelectionMode" Value="Extended"/>
+      <Setter Property="SelectionUnit" Value="FullRow"/>
+    </Style>
+    <Style TargetType="DataGridColumnHeader">
+      <Setter Property="Background" Value="{DynamicResource Card}"/>
+      <Setter Property="Foreground" Value="{DynamicResource Fg2}"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Padding" Value="10,9"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Line}"/>
+      <Setter Property="BorderThickness" Value="0,0,0,1"/>
+    </Style>
+    <Style TargetType="DataGridCell">
+      <Setter Property="Padding" Value="10,0"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="DataGridCell">
+            <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+              <ContentPresenter VerticalAlignment="Center"/>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+      <Style.Triggers>
+        <Trigger Property="IsSelected" Value="True">
+          <Setter Property="Background" Value="{DynamicResource Select}"/>
+          <Setter Property="Foreground" Value="{DynamicResource Fg}"/>
+        </Trigger>
+      </Style.Triggers>
+    </Style>
+  </Window.Resources>
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="224"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <!-- ============================ SIDEBAR ============================ -->
+    <Border Grid.Column="0" Background="{DynamicResource Side}" BorderBrush="{DynamicResource Line}" BorderThickness="0,0,1,0">
+      <DockPanel Margin="14,18,14,14">
+        <StackPanel DockPanel.Dock="Top">
+          <TextBlock Text="Workset Manager" FontSize="17" FontWeight="SemiBold" Margin="4,0,0,2" Foreground="{DynamicResource Fg}"/>
+          <TextBlock x:Name="txtModel" Style="{StaticResource Hint}" Margin="4,0,0,18" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+
+          <RadioButton x:Name="navWs" Style="{StaticResource Nav}" GroupName="nav" IsChecked="True">
+            <StackPanel>
+              <TextBlock Text="Worksets" FontWeight="SemiBold"/>
+              <TextBlock Text="Create, edit and claim" Style="{StaticResource Hint}" FontSize="11"/>
+            </StackPanel>
+          </RadioButton>
+          <RadioButton x:Name="navMap" Style="{StaticResource Nav}" GroupName="nav">
+            <StackPanel>
+              <DockPanel>
+                <Border x:Name="badgeMap" DockPanel.Dock="Right" CornerRadius="8" Padding="6,0" Background="{DynamicResource WarnButton}" Visibility="Collapsed">
+                  <TextBlock x:Name="txtBadgeMap" Foreground="White" FontSize="10.5" FontWeight="SemiBold"/>
+                </Border>
+                <TextBlock Text="Category mapping" FontWeight="SemiBold"/>
+              </DockPanel>
+              <TextBlock Text="Where new elements go" Style="{StaticResource Hint}" FontSize="11"/>
+            </StackPanel>
+          </RadioButton>
+          <RadioButton x:Name="navAct" Style="{StaticResource Nav}" GroupName="nav">
+            <StackPanel>
+              <TextBlock Text="Activity" FontWeight="SemiBold"/>
+              <TextBlock Text="What happened lately" Style="{StaticResource Hint}" FontSize="11"/>
+            </StackPanel>
+          </RadioButton>
+        </StackPanel>
+
+        <StackPanel DockPanel.Dock="Bottom">
+          <Border Style="{StaticResource CardBox}" Padding="12,10" Margin="0,0,0,4">
+            <StackPanel>
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <Ellipse x:Name="dotLive" Width="9" Height="9" Fill="#1F9D55" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                <TextBlock x:Name="txtLive" Text="Live" FontWeight="SemiBold" Foreground="{DynamicResource Fg}"/>
+              </StackPanel>
+              <TextBlock x:Name="txtLiveHint" Style="{StaticResource Hint}" FontSize="11" Margin="0,-4,0,8"/>
+              <TextBlock Text="Active workset" Style="{StaticResource Hint}" FontSize="11"/>
+              <TextBlock x:Name="txtActive" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Margin="0,0,0,6" Foreground="{DynamicResource Fg}"/>
+              <TextBlock Text="You are" Style="{StaticResource Hint}" FontSize="11"/>
+              <TextBlock x:Name="txtUser" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource Fg}"/>
+            </StackPanel>
+          </Border>
+          <TextBlock Text="CENTRAL MODEL" Style="{StaticResource Section}" Margin="4,12,0,6"/>
+          <Button x:Name="btnSync" Style="{StaticResource BtnWide}" Content="Sync now" ToolTip="Synchronize with central. Your worksets stay editable."/>
+          <Button x:Name="btnRelinquish" Style="{StaticResource BtnWide}" Content="Relinquish all mine..." ToolTip="Give back everything you have checked out. Offers Sync, Relinquish, Sync."/>
+          <Button x:Name="btnRefresh" Style="{StaticResource BtnWide}" Content="Refresh" ToolTip="Read the model again."/>
+          <Button x:Name="btnClose" Style="{StaticResource BtnWide}" Content="Close" Margin="0,10,0,0" ToolTip="Esc clears the selection first, then closes."/>
+        </StackPanel>
+        <Grid/>
+      </DockPanel>
+    </Border>
+
+    <!-- ============================ MAIN ============================ -->
+    <Grid Grid.Column="1" Margin="24,20,24,14">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <!-- page header -->
+      <StackPanel Grid.Row="0" Margin="0,0,0,14">
+        <TextBlock x:Name="txtPageTitle" Text="Worksets" Style="{StaticResource PageTitle}"/>
+        <TextBlock x:Name="txtPageHint" Style="{StaticResource Hint}" Margin="0,3,0,0"/>
+      </StackPanel>
+
+      <!-- message bar -->
+      <Border x:Name="barWarn" Grid.Row="1" Visibility="Collapsed" Margin="0,0,0,12" Padding="14,10"
+              CornerRadius="8" Background="{DynamicResource WarnBg}" BorderBrush="{DynamicResource WarnLine}" BorderThickness="1">
+        <StackPanel>
+          <DockPanel>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+              <Button x:Name="btnWarnYes" Style="{StaticResource BtnWarn}" Margin="8,0,0,0"/>
+              <Button x:Name="btnWarnAlt" Style="{StaticResource Btn}" Margin="8,0,0,0"/>
+              <Button x:Name="btnWarnNo" Style="{StaticResource Btn}" Content="Dismiss" Margin="8,0,0,0"/>
+            </StackPanel>
+            <TextBlock x:Name="txtWarn" TextWrapping="Wrap" Foreground="{DynamicResource WarnFg}" VerticalAlignment="Center"/>
+          </DockPanel>
+          <StackPanel x:Name="pnlWarnExtra" Orientation="Horizontal" Margin="0,10,0,0" Visibility="Collapsed">
+            <TextBlock Text="Move its elements to" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="{DynamicResource WarnFg}"/>
+            <ComboBox x:Name="cbMoveTo" Width="240" Margin="0,0,14,0"/>
+            <CheckBox x:Name="chkDeleteElements" Content="Delete its elements instead" Foreground="{DynamicResource WarnFg}"/>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ============== PAGE: WORKSETS ============== -->
+      <Grid x:Name="pageWs" Grid.Row="2">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Grid.Column="0" Margin="0,0,16,0">
+          <Button x:Name="btnNew" DockPanel.Dock="Left" Style="{StaticResource BtnPrimary}" Content="+  New workset"/>
+          <Grid DockPanel.Dock="Right" Width="230" Margin="0,0,0,8">
+            <TextBox x:Name="tbWsSearch" Padding="8,0,30,0"/>
+            <TextBlock x:Name="phWs" Text="Search worksets" IsHitTestVisible="False" Margin="11,0,0,0"
+                       VerticalAlignment="Center" Foreground="{DynamicResource Fg2}"/>
+            <Button x:Name="btnWsClear" Style="{StaticResource BtnClear}" Visibility="Collapsed"/>
+          </Grid>
+          <Grid/>
+        </DockPanel>
+
+        <Border x:Name="pnlName" Grid.Row="1" Grid.Column="0" Visibility="Collapsed" Margin="0,0,16,10" Padding="12,10"
+                CornerRadius="8" Background="{DynamicResource AccentSoft}">
+          <DockPanel>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+              <Button x:Name="btnNameOk" Style="{StaticResource BtnPrimary}" Content="Create" Margin="8,0,0,0"/>
+              <Button x:Name="btnNameCancel" Style="{StaticResource Btn}" Content="Cancel" Margin="8,0,0,0"/>
+            </StackPanel>
+            <CheckBox x:Name="chkClaimNew" DockPanel.Dock="Right" Content="Claim it as mine" Margin="14,0,0,0"/>
+            <TextBlock x:Name="txtNameLabel" DockPanel.Dock="Left" Text="Name" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="SemiBold"/>
+            <TextBox x:Name="tbName" Height="30"/>
+          </DockPanel>
+        </Border>
+
+        <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource CardBox}" Padding="2" Margin="0,0,16,0">
+          <DataGrid x:Name="gridWs">
+            <DataGrid.Columns>
+              <DataGridTemplateColumn Header="Workset" Width="2*" SortMemberPath="name">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                      <TextBlock Text="{Binding name}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                      <Border CornerRadius="8" Padding="7,1" Margin="8,0,0,0" Background="{DynamicResource AccentSoft}" Visibility="{Binding active_vis}" VerticalAlignment="Center">
+                        <TextBlock Text="Active" FontSize="10.5" FontWeight="SemiBold" Foreground="{DynamicResource Accent}"/>
+                      </Border>
+                    </StackPanel>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn Header="Claimed by" Width="1.4*" SortMemberPath="claim_text">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <Border CornerRadius="10" Padding="9,2" HorizontalAlignment="Left" Background="{Binding claim_bg}">
+                      <TextBlock Text="{Binding claim_text}" Foreground="{Binding claim_fg}" FontSize="11" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                    </Border>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTextColumn Header="Checked out by" Binding="{Binding owner}" Width="1.2*"/>
+              <DataGridTextColumn Header="Elements" Binding="{Binding elements}" Width="80" SortMemberPath="elements_n"/>
+            </DataGrid.Columns>
+          </DataGrid>
+        </Border>
+
+        <!-- details -->
+        <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Style="{StaticResource CardBox}" Padding="16,14">
+          <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+              <TextBlock x:Name="txtWsEmpty" Style="{StaticResource Hint}" Text="Select a workset on the left to see what you can do with it. Hold Ctrl to select several."/>
+              <StackPanel x:Name="pnlWsDetail" Visibility="Collapsed">
+                <TextBlock x:Name="txtWsName" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                <TextBlock x:Name="txtWsSummary" Style="{StaticResource Hint}" Margin="0,3,0,0"/>
+
+                <TextBlock Text="IN REVIT" Style="{StaticResource Section}"/>
+                <TextBlock x:Name="txtWsRevit" TextWrapping="Wrap" Margin="0,0,0,8"/>
+                <Button x:Name="btnActive" Style="{StaticResource BtnWide}" Content="Make it my active workset" ToolTip="New elements are created on the active workset."/>
+                <Button x:Name="btnEditable" Style="{StaticResource BtnWide}" Content="Make editable (check out)" ToolTip="Checks the workset out to you, so nobody else can change it until you relinquish it."/>
+
+                <TextBlock Text="CLAIM" Style="{StaticResource Section}"/>
+                <TextBlock x:Name="txtWsClaim" TextWrapping="Wrap" Margin="0,0,0,4"/>
+                <TextBlock Style="{StaticResource Hint}" FontSize="11" Margin="0,0,0,8"
+                           Text="A claim tells teammates who use IMM whose workset this is. They get a notice when they place elements on it. It does not lock anything in Revit."/>
+                <Button x:Name="btnClaim" Style="{StaticResource BtnWide}" Content="Claim as mine"/>
+                <Button x:Name="btnShare" Style="{StaticResource BtnWide}" Content="Claim as shared (others welcome)"/>
+                <Button x:Name="btnUnclaim" Style="{StaticResource BtnWide}" Content="Remove my claim"/>
+
+                <TextBlock Text="EDIT" Style="{StaticResource Section}"/>
+                <Button x:Name="btnRename" Style="{StaticResource BtnWide}" Content="Rename..."/>
+                <Button x:Name="btnDelete" Style="{StaticResource BtnWide}" Foreground="{DynamicResource Danger}" Content="Delete..."/>
+              </StackPanel>
+            </StackPanel>
+          </ScrollViewer>
+        </Border>
+      </Grid>
+
+      <!-- ============== PAGE: MAPPING ============== -->
+      <Grid x:Name="pageMap" Grid.Row="2" Visibility="Collapsed">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,16,8">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition Width="*" MinWidth="110"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <ComboBox x:Name="cbFilter" Grid.Column="0" Margin="0,0,8,0"/>
+          <ComboBox x:Name="cbDiscipline" Grid.Column="1" Margin="0,0,8,0"/>
+          <Grid Grid.Column="2">
+            <TextBox x:Name="tbSearch" Padding="8,0,30,0"/>
+            <TextBlock x:Name="phMap" Text="Search categories" IsHitTestVisible="False" Margin="11,0,0,0"
+                       VerticalAlignment="Center" Foreground="{DynamicResource Fg2}" TextTrimming="CharacterEllipsis"/>
+            <Button x:Name="btnMapClear" Style="{StaticResource BtnClear}" Visibility="Collapsed"/>
+          </Grid>
+          <CheckBox x:Name="chkTypes" Grid.Column="3" Content="Show types" Margin="10,0,0,0"
+                    ToolTip="List the types under each category, so a type can go to its own workset (for example skirting walls to ID_SKIRTING)."/>
+        </Grid>
+
+        <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource CardBox}" Padding="2" Margin="0,0,16,0">
+          <DataGrid x:Name="gridMap">
+            <DataGrid.Columns>
+              <DataGridTemplateColumn Header="" Width="30" SortMemberPath="kind">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <Ellipse Width="9" Height="9" Fill="{Binding dot}" HorizontalAlignment="Center"/>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTextColumn Header="Category" Binding="{Binding name}" Width="1.8*">
+                <DataGridTextColumn.ElementStyle>
+                  <Style TargetType="TextBlock">
+                    <Setter Property="FontWeight" Value="{Binding weight}"/>
+                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                    <Setter Property="ToolTip" Value="{Binding name}"/>
+                  </Style>
+                </DataGridTextColumn.ElementStyle>
+              </DataGridTextColumn>
+              <DataGridTextColumn Header="Goes to workset" Binding="{Binding ws_text}" Width="1.3*">
+                <DataGridTextColumn.ElementStyle>
+                  <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{Binding ws_fg}"/>
+                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                    <Setter Property="ToolTip" Value="{Binding ws_text}"/>
+                  </Style>
+                </DataGridTextColumn.ElementStyle>
+              </DataGridTextColumn>
+              <DataGridTextColumn Header="Status" Binding="{Binding source}" Width="0.7*">
+                <DataGridTextColumn.ElementStyle>
+                  <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{DynamicResource Fg2}"/>
+                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                  </Style>
+                </DataGridTextColumn.ElementStyle>
+              </DataGridTextColumn>
+              <DataGridTextColumn Header="In model" Binding="{Binding count}" Width="74" SortMemberPath="count_n"/>
+            </DataGrid.Columns>
+          </DataGrid>
+        </Border>
+
+        <!-- legend + save -->
+        <DockPanel Grid.Row="2" Grid.Column="0" Margin="0,10,16,0">
+          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Top">
+            <Button x:Name="btnRevertMap" Style="{StaticResource Btn}" Content="Undo changes" Margin="0,0,8,0"/>
+            <Button x:Name="btnSaveMap" Style="{StaticResource BtnPrimary}" Content="Save mapping" Margin="0"/>
+          </StackPanel>
+          <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+            <TextBlock x:Name="txtMapStatus" FontWeight="SemiBold" TextWrapping="Wrap"/>
+            <WrapPanel Margin="0,4,0,0">
+              <StackPanel Orientation="Horizontal" Margin="0,0,12,2">
+                <Ellipse Width="8" Height="8" Fill="#1F9D55" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                <TextBlock Text="mapped" Style="{StaticResource Hint}" FontSize="11"/>
+              </StackPanel>
+              <StackPanel Orientation="Horizontal" Margin="0,0,12,2">
+                <Ellipse Width="8" Height="8" Fill="#2F6FEB" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                <TextBlock Text="from a teammate" Style="{StaticResource Hint}" FontSize="11"/>
+              </StackPanel>
+              <StackPanel Orientation="Horizontal" Margin="0,0,12,2">
+                <Ellipse Width="8" Height="8" Fill="#E8590C" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                <TextBlock Text="needs a workset or a decision" Style="{StaticResource Hint}" FontSize="11"/>
+              </StackPanel>
+              <StackPanel Orientation="Horizontal" Margin="0,0,12,2">
+                <Ellipse Width="8" Height="8" Fill="#A0A8B0" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                <TextBlock Text="never moved" Style="{StaticResource Hint}" FontSize="11"/>
+              </StackPanel>
+            </WrapPanel>
+          </StackPanel>
+        </DockPanel>
+
+        <!-- right column: details + helpers -->
+        <Border Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Style="{StaticResource CardBox}" Padding="16,14">
+          <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+              <TextBlock x:Name="txtCatEmpty" Style="{StaticResource Hint}" Text="Select one or more categories on the left, then pick the workset they should go to. Hold Ctrl or Shift to select several."/>
+              <StackPanel x:Name="pnlCatDetail" Visibility="Collapsed">
+                <TextBlock x:Name="txtCatName" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                <TextBlock x:Name="txtCatSummary" Style="{StaticResource Hint}" Margin="0,3,0,0"/>
+
+                <TextBlock x:Name="txtMapToLabel" Text="GOES TO WORKSET" Style="{StaticResource Section}"/>
+                <ComboBox x:Name="cbMapTo" Margin="0,0,0,8"/>
+                <Button x:Name="btnClearMap" Style="{StaticResource BtnWide}" Content="Remove mapping"/>
+                <CheckBox x:Name="chkNever" Content="Never move this category" Margin="0,6,0,2"/>
+                <TextBlock x:Name="txtNeverHint" Style="{StaticResource Hint}" FontSize="11" Text="New elements of it stay on the active workset, even if a teammate maps it."/>
+                <TextBlock x:Name="txtTypesHint" Style="{StaticResource Hint}" FontSize="11" Margin="0,8,0,0" Visibility="Collapsed"
+                           Text="Its types can go to different worksets. Tick Show types above the list to set them one by one."/>
+
+                <Border x:Name="pnlSuggest" Visibility="Collapsed" Margin="0,14,0,0" Padding="12,10" CornerRadius="8" Background="{DynamicResource AccentSoft}">
+                  <StackPanel>
+                    <TextBlock x:Name="txtSuggest" TextWrapping="Wrap" Margin="0,0,0,8"/>
+                    <Button x:Name="btnAcceptSuggest" Style="{StaticResource BtnPrimary}" Content="Use suggestion" HorizontalAlignment="Left" Margin="0"/>
+                  </StackPanel>
+                </Border>
+
+                <Border x:Name="pnlConflict" Visibility="Collapsed" Margin="0,14,0,0" Padding="12,10" CornerRadius="8"
+                        Background="{DynamicResource WarnBg}" BorderBrush="{DynamicResource WarnLine}" BorderThickness="1">
+                  <StackPanel>
+                    <TextBlock Text="Teammates disagree" FontWeight="SemiBold" Foreground="{DynamicResource WarnFg}"/>
+                    <TextBlock x:Name="txtConflict" TextWrapping="Wrap" Foreground="{DynamicResource WarnFg}" Margin="0,4,0,8"/>
+                    <WrapPanel>
+                      <Button x:Name="btnKeepMine" Style="{StaticResource BtnWarn}" Content="Keep mine"/>
+                      <Button x:Name="btnUseTheirs" Style="{StaticResource Btn}" Content="Use theirs"/>
+                    </WrapPanel>
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+
+              <Border Height="1" Background="{DynamicResource Line}" Margin="0,18,0,0"/>
+              <TextBlock Text="SUGGEST A MAPPING FOR ME" Style="{StaticResource Section}"/>
+              <Button x:Name="btnAuto" Style="{StaticResource BtnWide}" Content="Suggest from workset names"
+                      ToolTip="Matches categories and types to your worksets by name, short forms and wall function. For example Doors to BEC_DOR, a Skirting wall type to ID_SKIRTING and a retaining wall to STR_RETAINING_WALLS."/>
+              <Button x:Name="btnApplyProposals" Style="{StaticResource BtnWide}" Content="Use all suggestions" Visibility="Collapsed"/>
+
+              <TextBlock Text="TEMPLATE FILE" Style="{StaticResource Section}"/>
+              <WrapPanel>
+                <Button x:Name="btnImport" Style="{StaticResource Btn}" Content="Import..."/>
+                <Button x:Name="btnExport" Style="{StaticResource Btn}" Content="Export..."/>
+              </WrapPanel>
+            </StackPanel>
+          </ScrollViewer>
+        </Border>
+      </Grid>
+
+      <!-- ============== PAGE: ACTIVITY ============== -->
+      <Grid x:Name="pageAct" Grid.Row="2" Visibility="Collapsed">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <WrapPanel Grid.Row="0">
+          <Button x:Name="btnScan" Style="{StaticResource BtnPrimary}" Content="Check who edited my worksets" ToolTip="Reads who last changed each element on the worksets you claimed."/>
+          <Button x:Name="btnActRefresh" Style="{StaticResource Btn}" Content="Refresh"/>
+          <Button x:Name="btnActClear" Style="{StaticResource Btn}" Content="Clear my log"/>
+        </WrapPanel>
+        <Border Grid.Row="1" Style="{StaticResource CardBox}" Padding="2">
+          <DataGrid x:Name="gridAct" SelectionMode="Single">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="When" Binding="{Binding when}" Width="140"/>
+              <DataGridTextColumn Header="Who" Binding="{Binding who}" Width="150"/>
+              <DataGridTextColumn Header="What happened" Binding="{Binding what}" Width="3*"/>
+              <DataGridTextColumn Header="Model" Binding="{Binding model}" Width="1.2*"/>
+            </DataGrid.Columns>
+          </DataGrid>
+        </Border>
+      </Grid>
+
+      <!-- status line -->
+      <TextBlock x:Name="txtStatus" Grid.Row="3" Style="{StaticResource Hint}" Margin="2,10,0,0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+    </Grid>
+  </Grid>
+</Window>

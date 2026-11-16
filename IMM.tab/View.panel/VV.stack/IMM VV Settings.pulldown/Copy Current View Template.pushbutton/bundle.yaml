@@ -1,4 +1,3 @@
 title: Copy Current View
 tooltip: |-
-  Copy the active view's Visibility/Graphics into the matching set.
-  How to use: click in any view. A 3D view updates the 3D set, any other view updates the 2D set.
+  Save this view's Visibility/Graphics as your 2D or 3D set.

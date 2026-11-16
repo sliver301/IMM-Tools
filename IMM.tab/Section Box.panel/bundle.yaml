@@ -1,3 +1,6 @@
+# Large Toggle, then the Box stack. ">>>>>" puts Settings in the panel's slide-out (small arrow at the bottom of the panel).
 layout:
+  - Toggle
   - Box
-  - Resize
+  - ">>>>>"
+  - Settings

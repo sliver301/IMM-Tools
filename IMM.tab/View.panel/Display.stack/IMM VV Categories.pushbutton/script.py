@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Dropdown-style check list of what is in the view: model categories, then linked
-models and CAD imports grouped by file type. Unchecked items are hidden live."""
+"""Dropdown-style check list of what is in the view: model categories, annotation
+categories, then linked models and CAD imports grouped by file type. Unchecked items are hidden live."""
 __title__ = 'Categories'
 __author__ = 'IMM'
 
@@ -20,6 +20,7 @@ clr.AddReference('System.Drawing')
 import System.Drawing
 import System.Windows.Threading
 import System.Windows
+import System.Windows.Media
 import System.Windows.Controls
 from System.Collections.Generic import List
 Visibility = System.Windows.Visibility
@@ -37,7 +38,8 @@ XAML = os.path.join(os.path.dirname(__file__), 'categories.xaml')
 
 vv.require_vg_view(view)
 
-CACHE_KEY = 'IMM_VV_CAT_CACHE_V2'
+CACHE_KEY = 'IMM_VV_CAT_CACHE_V3'
+ANNO = 'anno'
 CAD_EXTS = ('dwg', 'dxf', 'dgn', 'sat', 'skp', '3dm', 'axm')
 
 
@@ -71,16 +73,18 @@ def _ext(name):
 
 
 def _group_rank(group):
-    """Order of the sections in the list: categories, Revit links, CAD files, IFC, anything else."""
+    """Order of the sections: model categories, annotations, Revit links, CAD files, IFC, anything else."""
     if group == '':
         return (0, '')
-    if group == 'rvt':
+    if group == ANNO:
         return (1, '')
+    if group == 'rvt':
+        return (2, '')
     if group in CAD_EXTS:
-        return (2, group)
+        return (3, group)
     if group == 'ifc':
-        return (3, '')
-    return (4, group)
+        return (4, '')
+    return (5, group)
 
 
 # --------------------------------------------------------------------- entries
@@ -92,11 +96,30 @@ class CategoryEntry(object):
         self.group = group
 
     def is_visible(self, v):
+        if self.group == ANNO and _annotations_off(v):
+            return False
         return not v.GetCategoryHidden(self.cat.Id)
 
     def set_visible(self, v, visible):
+        if visible and self.group == ANNO and _annotations_off(v):
+            # The view's "show annotation categories" switch is off. Turn it on, but keep
+            # every other annotation category hidden so only this one appears.
+            for cat in ANNO_CATS:
+                try:
+                    if not v.GetCategoryHidden(cat.Id):
+                        v.SetCategoryHidden(cat.Id, True)
+                except Exception:
+                    pass
+            v.AreAnnotationCategoriesHidden = False
         if v.GetCategoryHidden(self.cat.Id) == visible:
             v.SetCategoryHidden(self.cat.Id, not visible)
+
+
+def _annotations_off(v):
+    try:
+        return bool(v.AreAnnotationCategoriesHidden)
+    except Exception:
+        return False
 
 
 class LinkEntry(object):
@@ -128,12 +151,15 @@ class LinkEntry(object):
                 view.HideElements(List[ElementId](ids))
 
 
-def model_categories():
+def view_categories(cat_type):
+    """Built-in categories of one type (Model or Annotation) that this view can hide."""
     cats = []
     seen = set()
     for cat in doc.Settings.Categories:
         try:
-            if cat.CategoryType != CategoryType.Model or cat.IsTagCategory:
+            if cat.CategoryType != cat_type:
+                continue
+            if cat_type == CategoryType.Model and cat.IsTagCategory:
                 continue
             if vv.eid_int(cat.Id) >= 0:  # imported CAD categories are listed separately
                 continue
@@ -197,7 +223,8 @@ def scan_keys(cats):
     keys = set()
     for cat in cats:
         try:
-            if view.GetCategoryHidden(cat.Id):
+            if view.GetCategoryHidden(cat.Id) or (cat.CategoryType == CategoryType.Annotation
+                                                  and _annotations_off(view)):
                 if _any_in_project(cat.Id):
                     keys.add('c:{}'.format(vv.eid_int(cat.Id)))
             elif _any_in_view(cat.Id):
@@ -227,7 +254,8 @@ def build_entries(cats, keys):
     entries = []
     for cat in cats:
         if 'c:{}'.format(vv.eid_int(cat.Id)) in keys:
-            entries.append(CategoryEntry(cat))
+            group = ANNO if cat.CategoryType == CategoryType.Annotation else ''
+            entries.append(CategoryEntry(cat, group=group))
     for key, (ltype, insts) in link_groups().items():
         if 'l:{}'.format(key) in keys and ltype is not None:
             entries.append(LinkEntry(ltype, insts))
@@ -322,6 +350,13 @@ class CategoriesWindow(forms.WPFWindow):
                     sep = System.Windows.Controls.Separator()
                     sep.Margin = System.Windows.Thickness(0, 5, 0, 5)
                     self.CatPanel.Children.Add(sep)
+                if entry.group == ANNO and last != ANNO:
+                    head = System.Windows.Controls.TextBlock()
+                    head.Text = 'Annotations'
+                    head.FontWeight = System.Windows.FontWeights.SemiBold
+                    head.Foreground = System.Windows.Media.Brushes.Gray
+                    head.Margin = System.Windows.Thickness(0, 0, 0, 3)
+                    self.CatPanel.Children.Add(head)
                 last = entry.group
             self.CatPanel.Children.Add(cb)
 
@@ -430,7 +465,8 @@ class CategoriesWindow(forms.WPFWindow):
 
 
 # ----------------------------------------------------------------------- main
-all_cats = model_categories()
+ANNO_CATS = view_categories(CategoryType.Annotation)
+all_cats = view_categories(CategoryType.Model) + ANNO_CATS
 cached = load_cache()
 if cached:
     entries = build_entries(all_cats, cached)  # instant: the window refreshes itself once open

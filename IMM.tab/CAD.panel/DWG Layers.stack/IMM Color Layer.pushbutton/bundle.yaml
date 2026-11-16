@@ -1,0 +1,4 @@
+title: Color Layer
+tooltip: |-
+  Show one DWG layer in red and the rest in grey.
+  Click a line on that layer. Ctrl+click adds more. Shift+click for settings.

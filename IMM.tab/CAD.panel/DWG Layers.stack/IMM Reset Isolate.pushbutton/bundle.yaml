@@ -1,0 +1,4 @@
+title: Reset Layers
+tooltip: |-
+  Undo Isolate Layer and Color Layer in this view.
+  Click to reset all DWGs, or select one DWG first.
