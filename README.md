@@ -30,6 +30,7 @@ can learn the tools from inside Revit.
 - [Update and uninstall](#update-and-uninstall)
 - [Made with AI](#made-with-ai)
 - [Feedback](#feedback)
+- [Acknowledgements](#acknowledgements)
 - [License](#license)
 
 ## Tools
@@ -60,6 +61,9 @@ Saved Visibility/Graphics presets and quick visibility switches.
 ### Section Box
 
 A faster section box for 3D views.
+
+> [!NOTE]
+> The Section Box tools are heavily inspired by **COINS Auto-Section Box** by COINS. The idea and workflow come from their plugin. The code here is written from scratch.
 
 | | Tool | What it does |
 |:-:|---|---|
@@ -145,6 +149,11 @@ daily workflow.
 Found a bug or have an idea for a tool? Open an
 [issue](https://github.com/sliver301/IMM-Tools/issues) with the tool name, your Revit version and,
 if possible, the error text from the pyRevit output window.
+
+## Acknowledgements
+
+- **COINS Auto-Section Box** by COINS: the concept behind the Section Box panel. The original add-in is no longer available, but the idea lives on here.
+- **[pyRevit](https://github.com/pyrevitlabs/pyRevit)**: the framework that makes IMM Tools possible.
 
 ## License
 
