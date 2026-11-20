@@ -325,6 +325,21 @@ class CategoriesWindow(forms.WPFWindow):
         self.refresh_timer.Interval = System.TimeSpan.FromMilliseconds(150)
         self.refresh_timer.Tick += self.refresh_tick
         self.refresh_timer.Start()
+        # However the window closes, no timer may outlive it: pyRevit clears
+        # this script's names when it ends, and a late tick would then run
+        # outside Revit's API context (or crash Revit).
+        self.Closed += self.on_closed
+
+    def _stop_timers(self):
+        for timer in (self.timer, self.refresh_timer):
+            try:
+                timer.Stop()
+            except Exception:
+                pass
+
+    def on_closed(self, sender, args):
+        self.closing = True
+        self._stop_timers()
 
     def _add_row(self, entry):
         cb = CheckBox()
@@ -364,6 +379,8 @@ class CategoriesWindow(forms.WPFWindow):
     def refresh_tick(self, sender, args):
         """After the list is on screen, re-scan the view and add items that appeared."""
         self.refresh_timer.Stop()
+        if self.closing:
+            return
         self.busy = True
         try:
             fresh = self.refresh_fn()
@@ -401,10 +418,7 @@ class CategoriesWindow(forms.WPFWindow):
             self._do_close()
 
     def _do_close(self):
-        try:
-            self.timer.Stop()
-        except Exception:
-            pass
+        self._stop_timers()
         try:
             self.Close()
         except Exception:

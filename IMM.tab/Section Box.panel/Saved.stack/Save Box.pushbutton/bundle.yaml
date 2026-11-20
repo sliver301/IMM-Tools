@@ -1,0 +1,3 @@
+tooltip: |-
+  Save the 3D view's section box under a name (no limit), like Revit's Save Selection.
+  Load it back any time with Load Box or from the History window's Saved tab.

@@ -27,6 +27,14 @@ try:
         else:
             view.IsSectionBoxActive = True
             saved = sb.recall_box(view)
+            if saved is None:
+                # nothing remembered for this view: use the current box of
+                # the Section Box History
+                try:
+                    import imm_sbhistory
+                    saved = imm_sbhistory.entry_box(imm_sbhistory.current_entry(doc))
+                except Exception:
+                    saved = None
             if saved is not None:
                 view.SetSectionBox(saved)
 except Exception as ex:

@@ -48,3 +48,6 @@ except Exception as ex:
 
 if switch_view:
     uidoc.ActiveView = view
+
+# Focus on the new box, so it fills the view (and its History snapshot)
+sb.zoom_to_box(uidoc, view, box)

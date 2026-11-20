@@ -1,38 +1,86 @@
+<!-- Section Box settings, same look as the History window (styles and
+     colour tokens from lib/imm_ui). Drag it by the header. -->
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="IMM Section Box Settings"
-        Width="380" SizeToContent="Height"
-        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        ShowInTaskbar="False">
-    <StackPanel Margin="16">
-        <TextBlock Text="Creation offset" FontWeight="SemiBold"/>
-        <TextBlock Text="Space added on every side when the box is created." Foreground="Gray" FontSize="11" Margin="0,2,0,4" TextWrapping="Wrap"/>
-        <DockPanel Margin="0,0,0,12">
-            <TextBlock x:Name="lblOffsetUnit" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="8,0,0,0" MinWidth="80"/>
-            <TextBox x:Name="txtOffset" Height="24" VerticalContentAlignment="Center"/>
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        SizeToContent="Height" Width="460" FontFamily="Segoe UI" UseLayoutRounding="True">
+  <Window.Resources>
+    <!--@STYLES@-->
+    <Style x:Key="Heading" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="@FG@"/>
+    </Style>
+    <Style x:Key="Note" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="Foreground" Value="@FG2@"/>
+      <Setter Property="TextWrapping" Value="Wrap"/>
+      <Setter Property="Margin" Value="0,2,0,8"/>
+    </Style>
+  </Window.Resources>
+
+  <Border Margin="18" Background="@BG@" BorderBrush="@BORDER@" BorderThickness="1" CornerRadius="12">
+    <Border.Effect>
+      <DropShadowEffect BlurRadius="22" ShadowDepth="3" Direction="270" Opacity="0.28" Color="Black"/>
+    </Border.Effect>
+    <StackPanel>
+
+      <!-- header (drag to move) -->
+      <DockPanel x:Name="Header" Background="Transparent" Margin="18,14,12,6">
+        <Button x:Name="CloseButton" DockPanel.Dock="Right" Style="{StaticResource Close}" ToolTip="Close (Esc)"/>
+        <TextBlock Text="Section Box Settings" FontSize="14" FontWeight="SemiBold" Foreground="@FG@"
+                   VerticalAlignment="Center"/>
+      </DockPanel>
+
+      <StackPanel Margin="18,6,18,4">
+        <TextBlock Text="Creation offset" Style="{StaticResource Heading}"/>
+        <TextBlock Text="Space added on every side when a box is created." Style="{StaticResource Note}"/>
+        <DockPanel Margin="0,0,0,14">
+          <TextBlock x:Name="OffsetUnit" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10,0,0,0"
+                     MinWidth="90" FontSize="12" Foreground="@FG2@"/>
+          <TextBox x:Name="OffsetBox" Style="{StaticResource Input}"/>
         </DockPanel>
 
-        <TextBlock Text="Grow / Shrink step" FontWeight="SemiBold"/>
-        <TextBlock Text="How far every face moves per click." Foreground="Gray" FontSize="11" Margin="0,2,0,4" TextWrapping="Wrap"/>
-        <DockPanel Margin="0,0,0,12">
-            <TextBlock x:Name="lblStepUnit" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="8,0,0,0" MinWidth="80"/>
-            <TextBox x:Name="txtStep" Height="24" VerticalContentAlignment="Center"/>
+        <TextBlock Text="Grow / Shrink step" Style="{StaticResource Heading}"/>
+        <TextBlock Text="How far every face moves per click." Style="{StaticResource Note}"/>
+        <DockPanel Margin="0,0,0,14">
+          <TextBlock x:Name="StepUnit" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10,0,0,0"
+                     MinWidth="90" FontSize="12" Foreground="@FG2@"/>
+          <TextBox x:Name="StepBox" Style="{StaticResource Input}"/>
         </DockPanel>
 
-        <TextBlock Text="Box orientation" FontWeight="SemiBold" Margin="0,0,0,4"/>
-        <RadioButton x:Name="rbParallel" GroupName="mode" Margin="0,2">
-            <TextBlock Text="Parallel: turn the box to follow the selected element" TextWrapping="Wrap"/>
-        </RadioButton>
-        <RadioButton x:Name="rbNative" GroupName="mode" Margin="0,2,0,16">
-            <TextBlock Text="Native: keep the box aligned to the project axes" TextWrapping="Wrap"/>
-        </RadioButton>
+        <TextBlock Text="Box orientation" Style="{StaticResource Heading}" Margin="0,0,0,6"/>
+        <Border Background="@SEG@" CornerRadius="9" Padding="1" HorizontalAlignment="Left">
+          <StackPanel Orientation="Horizontal">
+            <RadioButton x:Name="ParallelOption" GroupName="mode" Style="{StaticResource Segment}" Content="Parallel"/>
+            <RadioButton x:Name="NativeOption" GroupName="mode" Style="{StaticResource Segment}" Content="Native"/>
+          </StackPanel>
+        </Border>
+        <TextBlock x:Name="ModeNote" Style="{StaticResource Note}" Margin="0,6,0,14"/>
 
-        <DockPanel>
-            <Button Content="Defaults" Width="80" Height="26" Click="OnDefaultsClick" DockPanel.Dock="Left"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Save" Width="80" Height="26" Margin="0,0,8,0" IsDefault="True" Click="OnSaveClick"/>
-                <Button Content="Cancel" Width="80" Height="26" IsCancel="True" Click="OnCancelClick"/>
-            </StackPanel>
+        <TextBlock Text="History" Style="{StaticResource Heading}" Margin="0,0,0,4"/>
+        <DockPanel Margin="0,0,0,4">
+          <CheckBox x:Name="HistorySwitch" DockPanel.Dock="Right" Style="{StaticResource Switch}" Content=""
+                    VerticalAlignment="Center"/>
+          <TextBlock Text="Record every new section box with a snapshot" FontSize="12" Foreground="@FG@"
+                     VerticalAlignment="Center" TextWrapping="Wrap"/>
         </DockPanel>
+        <TextBlock Text="Keeps the last 4 boxes per model; pin up to 4 more so they stay. Saved boxes are kept separately, with no limit."
+                   Style="{StaticResource Note}" Margin="0,0,0,6"/>
+        <TextBlock x:Name="ErrorText" FontSize="11" Foreground="@WARN@" TextWrapping="Wrap"
+                   Visibility="Collapsed" Margin="0,4,0,0"/>
+      </StackPanel>
+
+      <!-- footer -->
+      <DockPanel Margin="18,10,18,16">
+        <Button x:Name="DefaultsButton" DockPanel.Dock="Left" Style="{StaticResource Secondary}" Content="Defaults"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+          <Button x:Name="CancelButton" Style="{StaticResource Secondary}" Content="Cancel" Margin="0,0,8,0"/>
+          <Button x:Name="SaveButton" Style="{StaticResource Primary}" Content="Save"/>
+        </StackPanel>
+      </DockPanel>
     </StackPanel>
+  </Border>
 </Window>

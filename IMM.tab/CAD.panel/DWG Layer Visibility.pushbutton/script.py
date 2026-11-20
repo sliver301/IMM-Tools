@@ -548,16 +548,32 @@ class MultiSelectController(object):
         self.update_drag_at_point(pos)
 
     def on_scroll_tick(self, sender, args):
-        if Mouse.LeftButton != MouseButtonState.Pressed or self.drag_mode is None:
-            self.stop_drag()
-            return
+        # A timer tick has no caller to catch errors: an exception here goes
+        # straight to Revit and crashes it. Stop scrolling on any problem.
+        try:
+            if Mouse.LeftButton != MouseButtonState.Pressed or self.drag_mode is None:
+                self.stop_drag()
+                return
 
-        sv = self.get_scroll_viewer()
-        if sv is not None and self.scroll_dir != 0:
-            sv.ScrollToVerticalOffset(sv.VerticalOffset + (self.scroll_dir * 2.0))
+            sv = self.get_scroll_viewer()
+            if sv is not None and self.scroll_dir != 0:
+                sv.ScrollToVerticalOffset(sv.VerticalOffset + (self.scroll_dir * 2.0))
 
-        pos = Mouse.GetPosition(self.lb)
-        self.update_drag_at_point(pos)
+            pos = Mouse.GetPosition(self.lb)
+            self.update_drag_at_point(pos)
+        except Exception:
+            try:
+                self.scroll_timer.Stop()
+            except Exception:
+                pass
+
+    def dispose(self):
+        """Window closed: make sure the auto-scroll timer can't outlive it."""
+        try:
+            self.scroll_timer.Stop()
+        except Exception:
+            pass
+        self.drag_mode = None
 
     def on_mouse_up(self, sender, args):
         self.stop_drag()
@@ -704,6 +720,7 @@ class CADLayerWindow(object):
         self.btn_cancel.Click += self.on_cancel
         self.win.PreviewKeyDown += self.on_win_key
         self.btn_reset.Click += self.on_reset
+        self.win.Closed += self.on_win_closed
 
     def get_elem_id_val(self, elem_id):
         try:
@@ -1099,6 +1116,15 @@ class CADLayerWindow(object):
         if args.Key == Key.Escape:
             args.Handled = True
             self.win.Close()
+
+    def on_win_closed(self, sender, args):
+        # e.g. Esc while dragging near the list edge: stop the auto-scroll
+        # timers before this script ends, so no tick can fire afterwards
+        for ctrl in (self.cad_ms_ctrl, self.lay_ms_ctrl):
+            try:
+                ctrl.dispose()
+            except Exception:
+                pass
 
     def show(self):
         self.win.ShowDialog()

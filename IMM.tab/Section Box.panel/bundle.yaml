@@ -1,6 +1,9 @@
-# Large Toggle, then the Box stack. ">>>>>" puts Settings in the panel's slide-out (small arrow at the bottom of the panel).
+# Large Toggle, the Box stack, large History, then the Saved stack (Save Box / Load Box).
+# ">>>>>" puts Settings in the panel's slide-out (small arrow at the bottom of the panel).
 layout:
   - Toggle
   - Box
+  - History
+  - Saved
   - ">>>>>"
   - Settings

@@ -1,0 +1,375 @@
+<!-- Shared look for the IMM windows (History bar, Settings).
+     imm_ui.py pastes everything between the BEGIN and END markers into a
+     window's Window.Resources, at the @STYLES@ marker, and fills in the
+     theme colour tokens. Keep this file a valid ResourceDictionary. -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<!--BEGIN-->
+    <!-- snapshot tile -->
+    <Style x:Key="Tile" TargetType="Button">
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Focusable" Value="False"/>
+      <Setter Property="BorderBrush" Value="Transparent"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="b" Background="@TILE@" BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="2" CornerRadius="9" Padding="6">
+              <ContentPresenter/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="BorderBrush" Value="@ACCENT@"/>
+                <Setter TargetName="b" Property="Background" Value="@TILEH@"/>
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="b" Property="Opacity" Value="0.85"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- pill-shaped on/off switch (a restyled CheckBox) -->
+    <Style x:Key="Switch" TargetType="CheckBox">
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Focusable" Value="False"/>
+      <Setter Property="Foreground" Value="@FG2@"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="CheckBox">
+            <StackPanel Orientation="Horizontal" Background="Transparent">
+              <ContentPresenter VerticalAlignment="Center" Margin="0,0,8,0"/>
+              <Border x:Name="Track" Width="40" Height="22" CornerRadius="11"
+                      Background="@TRACK@" BorderBrush="@TRACK@" BorderThickness="1">
+                <Border x:Name="Knob" Width="16" Height="16" CornerRadius="8" Background="White"
+                        HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2,0,0,0">
+                  <Border.RenderTransform>
+                    <TranslateTransform X="0"/>
+                  </Border.RenderTransform>
+                  <Border.Effect>
+                    <DropShadowEffect BlurRadius="3" ShadowDepth="1" Direction="270" Opacity="0.3" Color="Black"/>
+                  </Border.Effect>
+                </Border>
+              </Border>
+            </StackPanel>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="Track" Property="Background" Value="@ACCENT@"/>
+                <Setter TargetName="Track" Property="BorderBrush" Value="@ACCENT@"/>
+                <Trigger.EnterActions>
+                  <BeginStoryboard>
+                    <Storyboard>
+                      <DoubleAnimation Storyboard.TargetName="Knob"
+                                       Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                       To="18" Duration="0:0:0.14"/>
+                    </Storyboard>
+                  </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                  <BeginStoryboard>
+                    <Storyboard>
+                      <DoubleAnimation Storyboard.TargetName="Knob"
+                                       Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                       To="0" Duration="0:0:0.14"/>
+                    </Storyboard>
+                  </BeginStoryboard>
+                </Trigger.ExitActions>
+              </Trigger>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Track" Property="Opacity" Value="0.88"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- round icon button (pin); size and FontSize are set in code so it scales with the tile -->
+    <Style x:Key="Pin" TargetType="Button">
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Focusable" Value="False"/>
+      <Setter Property="Width" Value="26"/>
+      <Setter Property="Height" Value="26"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="Background" Value="#A6000000"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="b" Background="{TemplateBinding Background}" CornerRadius="99">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                TextElement.FontFamily="Segoe MDL2 Assets"
+                                TextElement.FontSize="{TemplateBinding FontSize}"
+                                TextElement.Foreground="{TemplateBinding Foreground}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="Opacity" Value="0.85"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- small round x -->
+    <Style x:Key="Close" TargetType="Button">
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Focusable" Value="False"/>
+      <Setter Property="Width" Value="24"/>
+      <Setter Property="Height" Value="24"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="b" Background="Transparent" CornerRadius="12">
+              <TextBlock Text="&#x2715;" FontSize="11" Foreground="@FG2@"
+                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="Background" Value="@TILEH@"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- filled accent button -->
+    <Style x:Key="Primary" TargetType="Button">
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="Background" Value="@ACCENT@"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="MinWidth" Value="72"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="b" Background="{TemplateBinding Background}" CornerRadius="7" Padding="14,6">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="Opacity" Value="0.88"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="b" Property="Opacity" Value="0.45"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- quiet button -->
+    <Style x:Key="Secondary" TargetType="Button">
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Foreground" Value="@FG@"/>
+      <Setter Property="Background" Value="@TILE@"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="MinWidth" Value="72"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="b" Background="{TemplateBinding Background}" BorderBrush="@BORDER@"
+                    BorderThickness="1" CornerRadius="7" Padding="12,5">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="Background" Value="@TILEH@"/>
+                <Setter TargetName="b" Property="BorderBrush" Value="@ACCENT@"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="b" Property="Opacity" Value="0.45"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- text box -->
+    <Style x:Key="Input" TargetType="TextBox">
+      <Setter Property="Foreground" Value="@FG@"/>
+      <Setter Property="CaretBrush" Value="@FG@"/>
+      <Setter Property="SelectionBrush" Value="@ACCENT@"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="TextBox">
+            <Border x:Name="b" Background="@INPUT@" BorderBrush="@INPUTB@" BorderThickness="1"
+                    CornerRadius="7" Padding="8,5">
+              <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="b" Property="BorderBrush" Value="@FG2@"/>
+              </Trigger>
+              <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="b" Property="BorderBrush" Value="@ACCENT@"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- one option of a segmented control (tabs, Parallel / Native) -->
+    <Style x:Key="Segment" TargetType="RadioButton">
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Focusable" Value="False"/>
+      <Setter Property="Foreground" Value="@FG2@"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="RadioButton">
+            <Border x:Name="b" Background="Transparent" CornerRadius="7" Padding="12,4" Margin="2">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="@FG@"/>
+              </Trigger>
+              <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="b" Property="Background" Value="@SEGON@"/>
+                <Setter Property="Foreground" Value="@FG@"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- slim vertical scroll bar: ScrollViewer with Style="{StaticResource SlimScroll}" -->
+    <Style x:Key="ScrollThumb" TargetType="Thumb">
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Thumb">
+            <Border x:Name="t" Background="@FG2@" Opacity="0.45" CornerRadius="4"/>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="t" Property="Opacity" Value="0.7"/>
+              </Trigger>
+              <Trigger Property="IsDragging" Value="True">
+                <Setter TargetName="t" Property="Opacity" Value="0.9"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="ScrollPage" TargetType="RepeatButton">
+      <Setter Property="Focusable" Value="False"/>
+      <Setter Property="IsTabStop" Value="False"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="RepeatButton">
+            <Border Background="Transparent"/>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="SlimScroll" TargetType="ScrollViewer">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ScrollViewer">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <ScrollContentPresenter Grid.Column="0" CanContentScroll="{TemplateBinding CanContentScroll}"/>
+              <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="1" Margin="6,0,0,0" Width="8"
+                         Orientation="Vertical" Cursor="Arrow"
+                         Maximum="{TemplateBinding ScrollableHeight}"
+                         ViewportSize="{TemplateBinding ViewportHeight}"
+                         Value="{TemplateBinding VerticalOffset}"
+                         Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}">
+                <ScrollBar.Template>
+                  <ControlTemplate TargetType="ScrollBar">
+                    <Border Background="@SEG@" CornerRadius="4">
+                      <Track x:Name="PART_Track" IsDirectionReversed="True">
+                        <Track.DecreaseRepeatButton>
+                          <RepeatButton Command="ScrollBar.PageUpCommand" Style="{StaticResource ScrollPage}"/>
+                        </Track.DecreaseRepeatButton>
+                        <Track.IncreaseRepeatButton>
+                          <RepeatButton Command="ScrollBar.PageDownCommand" Style="{StaticResource ScrollPage}"/>
+                        </Track.IncreaseRepeatButton>
+                        <Track.Thumb>
+                          <Thumb Style="{StaticResource ScrollThumb}" MinHeight="24"/>
+                        </Track.Thumb>
+                      </Track>
+                    </Border>
+                  </ControlTemplate>
+                </ScrollBar.Template>
+              </ScrollBar>
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- right-click menu -->
+    <Style x:Key="Menu" TargetType="ContextMenu">
+      <Setter Property="OverridesDefaultStyle" Value="True"/>
+      <Setter Property="HasDropShadow" Value="False"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ContextMenu">
+            <Border Background="@BG@" BorderBrush="@BORDER@" BorderThickness="1" CornerRadius="8"
+                    Padding="4" Margin="0,0,10,10">
+              <Border.Effect>
+                <DropShadowEffect BlurRadius="14" ShadowDepth="2" Direction="270" Opacity="0.25" Color="Black"/>
+              </Border.Effect>
+              <StackPanel IsItemsHost="True" MinWidth="180"/>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <!-- menu entry; its Tag holds a Segoe MDL2 Assets glyph -->
+    <Style x:Key="MenuItem" TargetType="MenuItem">
+      <Setter Property="Foreground" Value="@FG@"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="MenuItem">
+            <Border x:Name="b" Background="Transparent" CornerRadius="6" Padding="10,6">
+              <DockPanel>
+                <TextBlock DockPanel.Dock="Left" Width="24" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                           VerticalAlignment="Center" Foreground="@FG2@"
+                           Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"/>
+                <ContentPresenter ContentSource="Header" VerticalAlignment="Center"/>
+              </DockPanel>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsHighlighted" Value="True">
+                <Setter TargetName="b" Property="Background" Value="@TILEH@"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="b" Property="Opacity" Value="0.45"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="MenuSep" TargetType="Separator">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Separator">
+            <Border Height="1" Margin="8,4" Background="@BORDER@"/>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+<!--END-->
+</ResourceDictionary>

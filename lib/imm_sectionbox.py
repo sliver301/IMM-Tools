@@ -9,8 +9,6 @@ from Autodesk.Revit.DB import (
     ViewFamily, ViewFamilyType, XYZ
 )
 
-from pyrevit import script
-
 CONFIG_SECTION = 'IMMSectionBox'
 
 MODE_PARALLEL = 'parallel'
@@ -30,8 +28,16 @@ MAX_SAVED_BOXES = 50
 # --------------------------------------------------------------------------
 # Settings
 # --------------------------------------------------------------------------
+# pyrevit.script is imported only when a setting is read or written: it is
+# slow to load, and the History window doesn't need it to open.
 def _config():
+    from pyrevit import script
     return script.get_config(CONFIG_SECTION)
+
+
+def _save_config():
+    from pyrevit import script
+    script.save_config()
 
 
 def _get_float(cfg, name, default):
@@ -58,7 +64,7 @@ def save_settings(creation_offset, resize_step, mode):
     cfg.creation_offset = float(creation_offset)
     cfg.resize_step = float(resize_step)
     cfg.mode = mode
-    script.save_config()
+    _save_config()
 
 
 # --------------------------------------------------------------------------
@@ -157,6 +163,11 @@ def _box_from_list(vals):
     return box
 
 
+# Public names, used by the Section Box History
+box_to_list = _box_to_list
+box_from_list = _box_from_list
+
+
 def _saved_boxes(cfg):
     raw = cfg.get_option('saved_boxes', '{}')
     if isinstance(raw, dict):
@@ -176,7 +187,7 @@ def remember_box(view):
     while len(boxes) > MAX_SAVED_BOXES:
         boxes.pop(next(iter(boxes)))
     cfg.saved_boxes = json.dumps(boxes)
-    script.save_config()
+    _save_config()
 
 
 def recall_box(view):
@@ -335,6 +346,43 @@ def is_at_min_size(box):
     lo, hi = box.Min, box.Max
     return all((b - a) <= MIN_BOX_SIZE + 1e-6
                for a, b in ((lo.X, hi.X), (lo.Y, hi.Y), (lo.Z, hi.Z)))
+
+
+def zoom_to_box(uidoc, view, box, margin=0.08):
+    """Zoom the view so the box fills it (with a small margin). The 8 corners
+    are projected on the screen plane, so the fit is exact from any angle.
+    Call after the transaction, with the view open. Returns True when done."""
+    try:
+        uiview = None
+        for uv in uidoc.GetOpenUIViews():
+            if str(uv.ViewId) == str(view.Id):
+                uiview = uv
+                break
+        if uiview is None or view.IsPerspective:
+            return False
+        right, up, vdir = view.RightDirection, view.UpDirection, view.ViewDirection
+        t = box.Transform
+        lo, hi = box.Min, box.Max
+        us, vs, ws = [], [], []
+        for x in (lo.X, hi.X):
+            for y in (lo.Y, hi.Y):
+                for z in (lo.Z, hi.Z):
+                    p = t.OfPoint(XYZ(x, y, z))
+                    us.append(p.DotProduct(right))
+                    vs.append(p.DotProduct(up))
+                    ws.append(p.DotProduct(vdir))
+        du = (max(us) - min(us)) * margin
+        dv = (max(vs) - min(vs)) * margin
+        w = (max(ws) + min(ws)) / 2.0
+
+        def point(u, v):
+            return right.Multiply(u).Add(up.Multiply(v)).Add(vdir.Multiply(w))
+
+        uiview.ZoomAndCenterRectangle(point(min(us) - du, min(vs) - dv),
+                                      point(max(us) + du, max(vs) + dv))
+        return True
+    except Exception:
+        return False
 
 
 # --------------------------------------------------------------------------

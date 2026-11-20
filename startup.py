@@ -3,7 +3,9 @@
 1. Cleanup: removes the old ribbon test items ("Probe check box") from the IMM VV Settings dropdown.
    Safe to keep; it does nothing once they are gone.
 2. Starts the live workset watcher (IMM Workset Manager). A failure here never
-   blocks Revit; the reason is shown by the Live Watcher button."""
+   blocks Revit; the reason is shown by the Live Watcher button.
+3. Starts the section box history recorder (Section Box > History). A failure
+   here never blocks Revit; the History window says when it is not running."""
 try:
     import clr
     clr.AddReference('AdWindows')
@@ -38,5 +40,17 @@ except Exception:
         import imm_ws_common
         imm_ws_common.shared_set('RUNNING', False)
         imm_ws_common.shared_set('ERROR', traceback.format_exc())
+    except Exception:
+        pass
+
+try:
+    import imm_sbhistory
+    imm_sbhistory.start(__revit__)
+except Exception:
+    import traceback
+    try:
+        import imm_sbhistory
+        imm_sbhistory.shared_set('RUNNING', False)
+        imm_sbhistory.shared_set('ERROR', traceback.format_exc())
     except Exception:
         pass

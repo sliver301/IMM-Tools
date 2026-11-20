@@ -1,0 +1,3 @@
+tooltip: |-
+  Pick a saved section box and go to it. It becomes the current box
+  (in the History and for Toggle). Right-click a box to rename or delete it.
